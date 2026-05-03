@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# RockTI - 摇滚人格测试
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+24道趣味选择题，测出你的专属摇滚人格。
 
-Currently, two official plugins are available:
+## 16种摇滚人格
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+经典摇滚 | 硬摇滚 | 重金属 | 朋克 | 后朋克 | 前卫摇滚 | 迷幻摇滚 | 蓝调摇滚 | 民谣摇滚 | 另类摇滚 | 独立摇滚 | 垃圾摇滚 | 英伦摇滚 | 流行朋克 | 盯鞋 | 后摇
 
-## React Compiler
+## 特色
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 8维摇滚偏好评分模型 (EN/HV/RB/EX/CX/EM/RT/ST)
+- MBTI风格详细人格描述（人格画像、超能力、隐藏弱点、最佳拍档、人生BGM等）
+- 雷达图可视化
+- 混合型人格检测
+- 分享海报生成
+- 霓虹车库视觉风格
+- 移动端优先
 
-## Expanding the ESLint configuration
+## 技术栈
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 + TypeScript
+- Vite 7
+- Tailwind CSS v4
+- Framer Motion
+- Recharts
+- html2canvas-pro
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 开发
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 构建
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+## License
+
+MIT
