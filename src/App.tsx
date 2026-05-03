@@ -43,7 +43,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-dvh bg-stage-black text-paper-white">
+    <div className="min-h-dvh bg-stage-black text-paper-white noise-bg">
       <AnimatePresence mode="wait">
         {page === 'home' && (
           <HomePage key="home" onStart={handleStart} hasResult={!!result} onShowResult={() => setPage('result')} />
