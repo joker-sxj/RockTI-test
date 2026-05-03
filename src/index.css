@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-hot-pink: #FF2E88;
+  --color-electric-teal: #18D1C2;
+  --color-amp-yellow: #FFD43B;
+  --color-stage-black: #111111;
+  --color-paper-white: #FFF9EF;
+  --color-purple-haze: #8B5CF6;
+  --color-danger-red: #F43F3F;
+  --color-denim-blue: #2563EB;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Noto Sans SC'), local('NotoSansSC');
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Noto Sans SC Bold'), local('NotoSansSC-Bold');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Noto Sans SC', 'HarmonyOS Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #111111;
+  color: #FFF9EF;
+  min-height: 100dvh;
+}
+
+/* Neon glow effect */
+.neon-glow {
+  text-shadow: 0 0 10px rgba(255, 46, 136, 0.5), 0 0 20px rgba(255, 46, 136, 0.3);
+}
+
+.neon-glow-teal {
+  text-shadow: 0 0 10px rgba(24, 209, 194, 0.5), 0 0 20px rgba(24, 209, 194, 0.3);
+}
+
+/* Button press effect */
+.btn-press {
+  box-shadow: 4px 4px 0px #111111;
+  transition: all 0.1s ease;
+}
+
+.btn-press:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px #111111;
+}
+
+.btn-press:active {
+  transform: translateY(2px);
+  box-shadow: 2px 2px 0px #111111;
+}
