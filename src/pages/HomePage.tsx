@@ -36,92 +36,143 @@ export function HomePage({ onStart, hasResult, onShowResult }: HomePageProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="min-h-dvh bg-stage-black noise-bg overflow-hidden"
+      className="min-h-dvh bg-stage-black noise-bg flex flex-col items-center overflow-x-hidden"
     >
-      {/* Atmospheric background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full bg-hot-pink/6 blur-[150px]" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[400px] rounded-full bg-electric-teal/4 blur-[120px]" />
+      {/* Ambient glow */}
+      <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute top-[-15%] left-1/2 -translate-x-1/2 w-[600px] h-[500px] rounded-full bg-hot-pink/5 blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[15%] w-[400px] h-[350px] rounded-full bg-electric-teal/4 blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 py-16 md:py-24">
-        {/* Hero Section */}
-        <div className="flex flex-col items-center text-center mb-20 md:mb-28">
-          {/* Logo */}
-          <motion.div
-            initial={{ scale: 0.85, opacity: 0, y: -10 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 0.1 }}
-            className="mb-8"
-          >
-            <img
-              src={`${BASE}images/Rockti.png`}
-              alt="RockTI"
-              className="w-40 h-40 md:w-52 md:h-52 object-contain drop-shadow-[0_0_50px_rgba(255,46,136,0.35)]"
-            />
-          </motion.div>
+      <div className="relative z-10 w-full max-w-[1200px] flex flex-col">
 
-          {/* Title */}
+        {/* ── Section 1: Title & Action ── */}
+        <section className="flex flex-col items-center text-center px-6 pt-20 pb-14 md:pt-28 md:pb-20">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="text-6xl md:text-8xl font-black text-hot-pink neon-glow tracking-tighter mb-5"
+            transition={{ duration: 0.5 }}
+            className="text-[2.5rem] md:text-[4rem] font-black text-hot-pink tracking-tighter leading-none mb-5"
+            style={{ textShadow: '0 0 12px rgba(255,46,136,0.6), 0 0 36px rgba(255,46,136,0.3), 0 0 72px rgba(255,46,136,0.12)' }}
           >
             ROCKTI
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg md:text-xl text-paper-white/70 mb-3 font-medium"
+            transition={{ delay: 0.15 }}
+            className="text-paper-white/70 font-medium mb-2 text-[1rem] md:text-[1.1rem]"
           >
             24 道题，测出你的摇滚人格
           </motion.p>
 
-          {/* Description */}
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-sm md:text-base text-paper-white/40 max-w-md leading-relaxed mb-12"
+            transition={{ delay: 0.25 }}
+            className="text-paper-white/40 max-w-[480px] leading-[1.5] mb-10 text-[0.9rem] md:text-[1rem]"
           >
             你是舞台中央的经典摇滚，还是低头调效果器的盯鞋灵魂？
-            <br className="hidden md:block" />
+            <br />
             通过声音、情绪、态度和舞台选择，找到你的专属摇滚类型。
           </motion.p>
 
-          {/* Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 mb-8"
+            transition={{ delay: 0.35 }}
+            className="flex flex-col sm:flex-row gap-3"
           >
             <button
               onClick={onStart}
-              className="btn-press bg-hot-pink text-white text-lg font-bold px-12 py-4 rounded-2xl border-2 border-hot-pink/40 hover:bg-hot-pink/90 transition-colors"
+              className="min-w-[44px] min-h-[44px] bg-hot-pink text-white font-bold rounded-xl border-2 border-hot-pink/40 transition-all duration-150
+                         px-6 py-3 text-[0.95rem]
+                         sm:px-6 sm:py-3
+                         hover:bg-[#e0267a] hover:shadow-[0_0_20px_rgba(255,46,136,0.35)]
+                         active:translate-y-[1px]"
+              style={{ padding: '12px 24px' }}
             >
               开始测试
             </button>
             {hasResult && (
               <button
                 onClick={onShowResult}
-                className="btn-press bg-electric-teal text-stage-black text-lg font-bold px-12 py-4 rounded-2xl border-2 border-electric-teal/40 hover:bg-electric-teal/90 transition-colors"
+                className="min-w-[44px] min-h-[44px] bg-electric-teal text-stage-black font-bold rounded-xl border-2 border-electric-teal/40 transition-all duration-150
+                           px-6 py-3 text-[0.95rem]
+                           sm:px-6 sm:py-3
+                           hover:bg-[#15b8ab] hover:shadow-[0_0_20px_rgba(24,209,194,0.35)]
+                           active:translate-y-[1px]"
+                style={{ padding: '12px 24px' }}
               >
                 查看上次结果
               </button>
             )}
           </motion.div>
+        </section>
 
-          {/* Meta info */}
+        {/* ── Section 2: 16 Personality Grid ── */}
+        <section className="px-6 pb-14 md:pb-20">
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.45 }}
+            className="text-center text-[11px] text-paper-white/20 mb-6 tracking-[0.15em] uppercase"
+          >
+            16 种摇滚人格
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="grid gap-4"
+            style={{
+              gridTemplateColumns: 'repeat(2, 1fr)',
+            }}
+          >
+            {/* Desktop: 8 cols, Tablet: 4 cols via responsive override */}
+            <style>{`
+              @media (min-width: 768px) {
+                .persona-grid { grid-template-columns: repeat(4, 1fr) !important; }
+              }
+              @media (min-width: 1024px) {
+                .persona-grid { grid-template-columns: repeat(8, 1fr) !important; }
+              }
+            `}</style>
+            <div className="persona-grid grid gap-4">
+              {ROCK_PROFILES.map((profile, i) => (
+                <motion.div
+                  key={profile.id}
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.55 + i * 0.03, type: 'spring', stiffness: 180 }}
+                  className="group flex flex-col items-center"
+                >
+                  <div className="w-full aspect-square rounded-xl overflow-hidden border border-paper-white/[0.06] transition-all duration-250 group-hover:border-hot-pink/40 group-hover:shadow-[0_0_14px_rgba(255,46,136,0.18)] group-hover:scale-[1.06]">
+                    <img
+                      src={GENRE_IMAGES[profile.id]}
+                      alt={profile.genre}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <span className="mt-2 text-[11px] text-paper-white/40 group-hover:text-paper-white/70 transition-colors text-center leading-tight">
+                    {profile.personaName}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </section>
+
+        {/* ── Section 3: Footer ── */}
+        <section className="px-6 pb-10 text-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="flex items-center gap-3 text-xs text-paper-white/30"
+            transition={{ delay: 0.8 }}
+            className="flex items-center justify-center gap-3 text-[11px] text-paper-white/25 mb-5"
           >
             <span>约 3-5 分钟</span>
             <span className="w-1 h-1 rounded-full bg-paper-white/15" />
@@ -129,49 +180,17 @@ export function HomePage({ onStart, hasResult, onShowResult }: HomePageProps) {
             <span className="w-1 h-1 rounded-full bg-paper-white/15" />
             <span>生成专属海报</span>
           </motion.div>
-        </div>
 
-        {/* Type Preview Grid */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <p className="text-center text-xs text-paper-white/25 mb-8 tracking-widest uppercase">16 种摇滚人格</p>
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-5">
-            {ROCK_PROFILES.map((profile, i) => (
-              <motion.div
-                key={profile.id}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.9 + i * 0.035, type: 'spring', stiffness: 180 }}
-                className="group flex flex-col items-center"
-              >
-                <div className="w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden mb-2.5 border border-paper-white/[0.06] group-hover:border-hot-pink/40 group-hover:shadow-[0_0_15px_rgba(255,46,136,0.2)] transition-all duration-300">
-                  <img
-                    src={GENRE_IMAGES[profile.id]}
-                    alt={profile.genre}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-                <span className="text-[11px] text-paper-white/40 group-hover:text-paper-white/70 transition-colors text-center leading-tight">
-                  {profile.personaName}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+            className="text-[10px] text-paper-white/12"
+          >
+            本测试仅用于音乐偏好探索与娱乐，不构成心理诊断
+          </motion.p>
+        </section>
 
-        {/* Disclaimer */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="text-center text-[10px] text-paper-white/15 mt-16"
-        >
-          本测试仅用于音乐偏好探索与娱乐，不构成心理诊断
-        </motion.p>
       </div>
     </motion.div>
   )
