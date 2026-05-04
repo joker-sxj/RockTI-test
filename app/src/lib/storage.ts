@@ -2,9 +2,9 @@ import type { RocktiResult, UserAnswerMap } from "../types/rockti";
 
 /**
  * Schema 版本号 — 算法 / 数据结构每次大改都升级，旧浏览器中残留的数据自动清掉。
- * v3 = 离散化曼哈顿距离 + likert 题目（2026-05-04）
+ * v4 = 连续 0-100 分曼哈顿距离 + 缩窄 M 区间 + 多级 tiebreaker（修复经典摇滚永远胜出 bug，2026-05-04）
  */
-const SCHEMA_VERSION = "2026-05-04-v3";
+const SCHEMA_VERSION = "2026-05-04-v4";
 
 const KEYS = {
   ANSWERS: "rockti_answers",

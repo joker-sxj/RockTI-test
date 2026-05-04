@@ -14,18 +14,36 @@ export const DIMENSION_LABELS: Record<DimensionKey, { name: string; short: strin
   ST: { name: "舞台社交", short: "ST", description: "对合唱、互动、群体氛围的偏好" },
 };
 
-/** 每个维度有 3 道题，sum 范围 3-9。L/M/H 阈值如下 */
+/**
+ * 每个维度有 3 道题，sum 范围 3-9。
+ *
+ * v3 算法（2026-05）：缩窄 M 区间，避免"中庸偏差"导致大量用户被判为全 M 向量。
+ *   - sum 3-5 → L（3 个值，43%）
+ *   - sum  6  → M（仅 1 个值，14%）
+ *   - sum 7-9 → H（3 个值，43%）
+ *
+ * 旧阈值（L_MAX=4, H_MIN=8）下 M 占 43%，只要 3 题里没有 2 题选极端就一定是 M，
+ * 配合稳定排序使"经典摇滚"在平局时永远胜出。新阈值参考 SBTI 设计的方法（M 仅 1 个值）。
+ */
 export const LEVEL_THRESHOLDS = {
-  L_MAX: 4, // sum ≤ 4 → L
-  H_MIN: 8, // sum ≥ 8 → H
-  // 5-7 → M
+  L_MAX: 5, // sum ≤ 5 → L
+  H_MIN: 7, // sum ≥ 7 → H
+  // sum = 6 → M
 } as const;
 
-/** Level → 雷达图数值（0-100） */
+/**
+ * Level → 雷达图数值（0-100）
+ *
+ * v3：与 sumToScore 中点对齐——
+ *   L 区间中点 sum=4 → score≈17
+ *   M 仅 sum=6 → score=50
+ *   H 区间中点 sum=8 → score≈83
+ * 这样原型分数与用户实际分数在同一尺度上，连续距离才有意义。
+ */
 export const LEVEL_SCORES: Record<Level, number> = {
-  L: 20,
-  M: 55,
-  H: 88,
+  L: 17,
+  M: 50,
+  H: 83,
 };
 
 /** Level → 距离计算用的 1/2/3 数值 */

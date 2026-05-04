@@ -52,7 +52,7 @@ export type RockProfile = {
 };
 
 export type RankedResult = RockProfile & {
-  /** 用户向量与该 profile pattern 的曼哈顿距离 (0-16) */
+  /** 用户向量与该 profile pattern 的连续 0-100 分曼哈顿距离 (0-800) */
   distance: number;
   /** 精确档位对齐数 (0-8) */
   exact: number;
@@ -65,12 +65,12 @@ export type RankedResult = RockProfile & {
 export type RocktiResult = {
   /** 用户每维度 0-100 标准化分（雷达图用） */
   userScores: DimensionScores;
-  /** 用户每维度 L/M/H 档位（用于距离计算） */
+  /** 用户每维度 L/M/H 档位（用于精确匹配 tiebreaker） */
   userLevels: DimensionLevels;
   primary: RankedResult;
   secondary: RankedResult;
   third: RankedResult;
-  /** 第一名与第二名距离差 ≤ 1 时为混合人格 */
+  /** 第一名与第二名连续距离差 ≤ 30 时为混合人格 */
   isHybrid: boolean;
   completedAt: string;
 };
