@@ -258,7 +258,7 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "后摇滚",
     personaName: "远山延迟信号",
     tagline: "你不急着唱，因为你的情绪会自己长成山。",
-    pattern: "M  M  L  H  H  H  L  L".replace(/\s+/g, ""),
+    pattern: "L  M  L  H  H  H  L  L".replace(/\s+/g, ""),
     analysis:
       "你喜欢器乐、渐强、空间、长线情绪和电影感。不一定需要歌词，因为你相信声音本身可以完成叙事——前半段安静，后半段把所有情绪推到天边。",
     strengths: ["情绪深", "有耐心", "画面感强"],
