@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files (never commit)
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.idea/
+.vscode/
+.vscode/local.*
+*.swp
+.DS_Store
+Thumbs.db
+
+# OS / temp
+*.tmp
+*.bak
+
+# Vercel
+.vercel/
+
+# Claude Code local config
+.claude/
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Tests
+coverage/
+
+# Local-only working files (privacy: never push to public repo)
+history.md
+*.local.md
+notes.local/
+**/.cache/

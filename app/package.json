@@ -1,0 +1,37 @@
+{
+  "name": "rockti",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "ROCKTI 摇滚人格测试 H5 - 24 道题，8 维偏好模型，16 种摇滚人格",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^11.11.17",
+    "html-to-image": "^1.11.13",
+    "qrcode": "^1.5.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.13.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "globals": "^15.12.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.15.0",
+    "vite": "^7.0.0"
+  }
+}
