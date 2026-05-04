@@ -123,8 +123,6 @@ Vercel 会自动识别 Vite 框架，跑 `npm install && npm run build`，部署
 │   ├── plans/                    # 设计文档
 │   └── spec/                     # 原始 spec
 ├── image/                        # 原始素材（设计师交付）
-├── rockti_开发文档_v_1_0.md       # 完整产品 / UI / 算法 spec
-├── AGENT.md                      # 开发流水线
 └── README.md                     # 本文档
 ```
 

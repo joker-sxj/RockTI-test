@@ -48,3 +48,9 @@ history.md
 *.local.md
 notes.local/
 **/.cache/
+
+# Internal dev / design documents (kept locally, not for public repo)
+AGENT.md
+rockti_开发文档_*.md
+rockti_开发文档_*.docx
+docs/plans/
