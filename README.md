@@ -52,12 +52,29 @@ npm run lint     # ESLint
 
 ---
 
-## 📦 部署到 Vercel
+## 📦 部署
+
+### 方案 A · GitHub Pages（推荐，自动部署）
+
+仓库已配 `.github/workflows/deploy.yml`，每次 push 到 `main` 都会自动 build 并部署到 GitHub Pages。
+
+**只需一次启用**：
+1. 进入仓库 **Settings → Pages**
+2. **Source** 选 **GitHub Actions**
+
+下次 push 之后 workflow 会自动跑，部署完成后访问：
+
+```
+https://joker-sxj.github.io/rockti/
+```
+
+Workflow 内部用 `--base=/rockti/` 构建，并把 `index.html` 复制成 `404.html` 作为 SPA fallback（避免刷新 404）。
+
+### 方案 B · Vercel
 
 仓库已配 `app/vercel.json`，使用 SPA rewrites。
 
 **只需两步**：
-
 1. 把仓库 import 到 Vercel
 2. 在 Project Settings → General → **Root Directory** 设置为 `app`
 

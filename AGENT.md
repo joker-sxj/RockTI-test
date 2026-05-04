@@ -62,15 +62,21 @@
 - 单 chunk 最大 367KB（Recharts，gzip 102KB），index.js 242KB（gzip 79KB）
 - `app/vercel.json` 配 SPA rewrites（避免刷新 404）
 - 仓库根 `.gitignore` 加 `history.md` / `*.local.md` / `notes.local/`（隐私清单）
+- `.github/workflows/deploy.yml` GitHub Actions 自动部署到 Pages，零手动操作
+- 图片路径用 `import.meta.env.BASE_URL` 适配子路径（`/rockti/`）
 
 **关键决策**：
-- Vercel 部署的 Root Directory 让用户在 Project Settings 里指定为 `app`，比仓库根写 fallback vercel.json 更干净
+- 把 GitHub Pages 自动部署作为主推（用户曾用过 GitHub Pages，且 workflow 零授权）
+- Vercel 作为备选（需要浏览器登录授权，不能完全自动化）
+- Workflow 用 `npm run build -- --base=/rockti/` 命令行覆盖默认 base，避免动 vite.config 影响本地 dev
+- SPA fallback：`cp dist/index.html dist/404.html`（GitHub Pages 不支持 rewrites，但识别 404.html）
 - Git author email 在仓库范围用 GitHub noreply（`<user>@users.noreply.github.com`），不动全局配置
 - 没有引入 React Router、状态管理库、UI 组件库 — 三个 page + useReducer + Tailwind 已足够覆盖
 
 **已知限制**：
 - 没接入正式 analytics（spec 16 章列出的事件埋点暂未实现，按 MVP 范围延后）
 - 没做 PWA / Service Worker（首次加载后离线可用，但安装到桌面需要后续加 manifest）
+- GitHub Pages 部署的子路径是 `/rockti/`，二维码生成是 `window.location.origin`，扫码会跳到 `https://joker-sxj.github.io/`（缺 `/rockti/`） — 后续可改为 `origin + pathname` 修正
 
 ---
 
