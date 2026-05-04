@@ -54,31 +54,29 @@ npm run lint     # ESLint
 
 ## 📦 部署
 
-### 方案 A · GitHub Pages（推荐，自动部署）
+### 方案 A · Vercel（推荐，国内可访问性最好）
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjoker-sxj%2Frockti&root-directory=app)
+
+点上面的按钮，30 秒部署：
+1. 用 GitHub 账号登录 Vercel
+2. **Root Directory** 已经预填为 `app`（关键！）
+3. 直接点 Deploy，等 30 秒拿到 `https://rockti-xxx.vercel.app` 链接
+
+仓库已配 `app/vercel.json`，SPA 路由 + 静态资源 cache 都已设好。
+
+### 方案 B · GitHub Pages（自动部署，国内不稳定）
 
 仓库已配 `.github/workflows/deploy.yml`，每次 push 到 `main` 都会自动 build 并部署到 GitHub Pages。
 
-**只需一次启用**：
-1. 进入仓库 **Settings → Pages**
-2. **Source** 选 **GitHub Actions**
+**只需一次启用**：仓库 **Settings → Pages → Source** 选 **GitHub Actions**
 
-下次 push 之后 workflow 会自动跑，部署完成后访问：
-
+部署完成后访问：
 ```
 https://joker-sxj.github.io/rockti/
 ```
 
-Workflow 内部用 `--base=/rockti/` 构建，并把 `index.html` 复制成 `404.html` 作为 SPA fallback（避免刷新 404）。
-
-### 方案 B · Vercel
-
-仓库已配 `app/vercel.json`，使用 SPA rewrites。
-
-**只需两步**：
-1. 把仓库 import 到 Vercel
-2. 在 Project Settings → General → **Root Directory** 设置为 `app`
-
-Vercel 会自动识别 Vite 框架，跑 `npm install && npm run build`，部署 `app/dist`。
+⚠️ 注意：`*.github.io` 域名在中国大陆经常被屏蔽，不挂梯子可能打不开。国内访问推荐方案 A。
 
 ---
 
