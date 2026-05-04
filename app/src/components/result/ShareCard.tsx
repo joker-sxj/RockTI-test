@@ -4,7 +4,7 @@ import { DIMENSIONS } from "../../types/rockti";
 import { DIMENSION_LABELS, LEVEL_LABELS, ROCKTI_DISCLAIMER } from "../../data/dimensions";
 import { topDimensions } from "../../lib/scoring";
 import { generateQrCodeDataUrl } from "../../lib/share";
-import { logoImageUrl } from "../../lib/utils";
+import { profileImageUrl } from "../../lib/utils";
 
 type Props = {
   result: RocktiResult;
@@ -13,7 +13,7 @@ type Props = {
 
 const POSTER_W = 1080;
 const POSTER_H = 1350;
-const RADAR_SIZE = 380;
+const RADAR_SIZE = 280;
 
 /** 自定义 SVG 雷达图 — 不依赖 Recharts，html-to-image 截图时稳定 */
 function PosterRadar({
@@ -26,7 +26,6 @@ function PosterRadar({
   const cx = RADAR_SIZE / 2;
   const cy = RADAR_SIZE / 2;
   const r = RADAR_SIZE * 0.34;
-
   const angles = DIMENSIONS.map((_, i) => -Math.PI / 2 + (i * Math.PI) / 4);
 
   const point = (angle: number, ratio: number): [number, number] => [
@@ -51,7 +50,6 @@ function PosterRadar({
 
   return (
     <svg width={RADAR_SIZE} height={RADAR_SIZE} viewBox={`0 0 ${RADAR_SIZE} ${RADAR_SIZE}`}>
-      {/* 4 圈八角网格 */}
       {ringPolygons.map((points, i) => (
         <polygon
           key={i}
@@ -59,50 +57,38 @@ function PosterRadar({
           fill="none"
           stroke="#111111"
           strokeOpacity={i === 3 ? 0.55 : 0.22}
-          strokeWidth={i === 3 ? 3 : 1.5}
+          strokeWidth={i === 3 ? 2 : 1.2}
         />
       ))}
-      {/* 8 条轴线 */}
       {DIMENSIONS.map((d, i) => {
         const [x, y] = point(angles[i], 1);
-        return <line key={d} x1={cx} y1={cy} x2={x} y2={y} stroke="#111111" strokeOpacity={0.2} strokeWidth={1.5} />;
+        return (
+          <line key={d} x1={cx} y1={cy} x2={x} y2={y} stroke="#111111" strokeOpacity={0.18} strokeWidth={1.2} />
+        );
       })}
-      {/* 原型轮廓（虚线） */}
       <polygon
         points={polygonPoints(prototypeScores)}
         fill="#111111"
         fillOpacity={0.08}
         stroke="#111111"
-        strokeWidth={3}
-        strokeDasharray="8 6"
+        strokeWidth={2}
+        strokeDasharray="6 4"
       />
-      {/* 用户实心 */}
       <polygon
         points={polygonPoints(userScores)}
         fill="#FF2E88"
         fillOpacity={0.45}
         stroke="#FF2E88"
-        strokeWidth={5}
+        strokeWidth={3.5}
         strokeLinejoin="round"
       />
-      {/* 用户顶点小圆 */}
       {DIMENSIONS.map((d, i) => {
         const [x, y] = point(angles[i], Math.max(0.04, (userScores[d] || 0) / 100));
         return (
-          <circle
-            key={d}
-            cx={x}
-            cy={y}
-            r={6}
-            fill="#FFD43B"
-            stroke="#111111"
-            strokeWidth={2.5}
-          />
+          <circle key={d} cx={x} cy={y} r={4.5} fill="#FFD43B" stroke="#111111" strokeWidth={1.8} />
         );
       })}
-      {/* 中心 */}
-      <circle cx={cx} cy={cy} r={5} fill="#111111" />
-      {/* 8 维标签 */}
+      <circle cx={cx} cy={cy} r={3.5} fill="#111111" />
       {DIMENSIONS.map((d, i) => {
         const [lx, ly] = point(angles[i], 1.22);
         return (
@@ -112,7 +98,7 @@ function PosterRadar({
             y={ly}
             textAnchor="middle"
             dominantBaseline="central"
-            fontSize={20}
+            fontSize={15}
             fontWeight={900}
             fill="#111111"
           >
@@ -128,10 +114,11 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
   const { primary, secondary, isHybrid, userScores, userLevels } = result;
   const [qrUrl, setQrUrl] = useState<string>("");
   const top3 = topDimensions(userScores, 3);
+  const shortUrl = shareUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
   useEffect(() => {
     let active = true;
-    generateQrCodeDataUrl(shareUrl, 240).then((url) => {
+    generateQrCodeDataUrl(shareUrl, 200).then((url) => {
       if (active) setQrUrl(url);
     });
     return () => {
@@ -139,8 +126,10 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
     };
   }, [shareUrl]);
 
-  // URL 显示用：去掉 protocol，简短
-  const shortUrl = shareUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  // 根据人格名长度选合适的字号（更保守，避免溢出）
+  const personaLen = primary.personaName.length;
+  const personaFontSize =
+    personaLen <= 4 ? 96 : personaLen <= 5 ? 84 : personaLen <= 6 ? 74 : 64;
 
   return (
     <div
@@ -155,207 +144,187 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
     >
       {/* 网格底纹 */}
       <div
-        className="absolute inset-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 opacity-[0.16] pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(17,17,17,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(17,17,17,.3) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+            "linear-gradient(rgba(17,17,17,1) 1px, transparent 1px), linear-gradient(90deg, rgba(17,17,17,1) 1px, transparent 1px)",
+          backgroundSize: "54px 54px",
         }}
       />
-      {/* 大星星装饰 */}
+
+      {/* 装饰星 */}
       <div
-        className="absolute select-none pointer-events-none"
-        style={{ top: 32, right: 80, fontSize: 80, color: "#11111122", transform: "rotate(-12deg)" }}
+        className="absolute top-10 right-12 text-[28px] font-black opacity-30 pointer-events-none"
+        style={{ color: "#111111" }}
       >
         ✦
       </div>
-      <div
-        className="absolute select-none pointer-events-none"
-        style={{ bottom: 320, right: 32, fontSize: 60, color: "#11111122", transform: "rotate(8deg)" }}
-      >
-        ★
-      </div>
-      <div
-        className="absolute select-none pointer-events-none"
-        style={{ top: 540, left: 30, fontSize: 50, color: "#11111122", transform: "rotate(-6deg)" }}
-      >
-        ⚡
-      </div>
 
-      {/* 装饰贴纸：右上 + 左下 */}
       <div
-        className="absolute top-12 right-14 bg-rockti-yellow border-[6px] border-rockti-black rounded-3xl px-7 py-2.5 text-2xl font-extrabold shadow-[12px_12px_0_0_#111111]"
-        style={{ transform: "rotate(6deg)" }}
+        className="relative z-10 h-full flex flex-col"
+        style={{ padding: "48px 52px" }}
       >
-        ★ NEON GARAGE
-      </div>
-      {isHybrid && (
-        <div
-          className="absolute top-[510px] right-[38px] bg-rockti-paper border-[5px] border-rockti-black rounded-2xl px-5 py-1.5 text-lg font-extrabold shadow-[8px_8px_0_0_#111111]"
-          style={{ transform: "rotate(-8deg)" }}
-        >
-          ✶ 混合人格
-        </div>
-      )}
-      <div
-        className="absolute bottom-[290px] left-12 bg-rockti-pink text-rockti-paper border-[5px] border-rockti-black rounded-2xl px-5 py-1.5 text-lg font-extrabold shadow-[8px_8px_0_0_#111111]"
-        style={{ transform: "rotate(-5deg)" }}
-      >
-        AMP UP / TURN IT LOUD
-      </div>
-
-      <div className="relative z-10 h-full px-16 py-14 flex flex-col">
         {/* === Header === */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
-            <img
-              src={logoImageUrl()}
-              alt="ROCKTI"
-              className="w-20 h-20 rounded-2xl border-[5px] border-rockti-black bg-rockti-paper object-cover shadow-[6px_6px_0_0_#111111]"
-            />
-            <div>
-              <div className="text-3xl font-black tracking-[0.4em]">ROCKTI</div>
-              <div className="text-base font-bold opacity-80 tracking-wider">摇滚人格测试 · v1.0</div>
+        <header className="flex items-end justify-between border-b-[3px] border-rockti-black/80 pb-3 shrink-0">
+          <div>
+            <div className="text-[40px] font-black tracking-[0.12em] leading-none">
+              ROCKTI
+            </div>
+            <div className="mt-1.5 text-[12px] font-bold opacity-75 tracking-[0.2em]">
+              ROCK PERSONALITY · 摇滚人格测试
             </div>
           </div>
-        </div>
+          <div className="text-right text-[10px] font-bold opacity-65 tracking-[0.2em] leading-relaxed">
+            EST. 2026
+            <br />
+            MADE FOR FUN
+          </div>
+        </header>
 
-        {/* === 主标题区 === */}
-        <div className="mt-9">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="bg-rockti-black text-rockti-paper px-5 py-2 rounded-full text-2xl font-extrabold tracking-wider">
-              {primary.genre}
-            </div>
-            <div className="bg-rockti-paper border-[3px] border-rockti-black px-4 py-1.5 rounded-full text-lg font-extrabold">
-              匹配度 {primary.match}%
-            </div>
-          </div>
-          <h1
-            className="font-black tracking-tight leading-[0.95]"
-            style={{ fontSize: 130 }}
+        {/* === 主人格区：人格图 + 标题 === */}
+        <section className="mt-6 grid grid-cols-[260px_1fr] gap-6 items-center shrink-0">
+          {/* 人格图 */}
+          <div
+            className="w-[260px] h-[260px] rounded-3xl border-[4px] border-rockti-black overflow-hidden bg-rockti-paper shadow-[8px_8px_0_0_#111111]"
           >
-            {primary.personaName}
-          </h1>
-          <p className="mt-5 text-2xl font-bold leading-snug max-w-[820px] opacity-90">
-            {primary.tagline}
-          </p>
-        </div>
+            <img
+              src={profileImageUrl(primary.imageFile)}
+              alt={primary.genre}
+              className="w-full h-full object-cover"
+              crossOrigin="anonymous"
+            />
+          </div>
+          {/* 人格信息 */}
+          <div className="flex flex-col justify-center min-w-0">
+            <div className="flex flex-wrap gap-2 mb-3">
+              <span className="bg-rockti-black text-rockti-paper px-4 py-1 rounded-full text-[16px] font-extrabold tracking-wider">
+                {primary.genre}
+              </span>
+              <span className="bg-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[14px] font-extrabold">
+                匹配度 {primary.match}%
+              </span>
+              {isHybrid && (
+                <span className="bg-rockti-pink text-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[14px] font-extrabold">
+                  ✶ 混合人格
+                </span>
+              )}
+            </div>
+            <h1
+              className="font-black tracking-tight leading-[0.95] truncate"
+              style={{ fontSize: personaFontSize }}
+            >
+              {primary.personaName}
+            </h1>
+            <p className="mt-3 text-[19px] font-bold leading-snug opacity-90 line-clamp-3">
+              {primary.tagline}
+            </p>
+          </div>
+        </section>
 
         {/* === 雷达 + Top Dim === */}
-        <div className="mt-8 grid grid-cols-[auto_1fr] gap-8 items-center">
-          <div className="bg-rockti-paper rounded-3xl border-[5px] border-rockti-black p-3 shadow-[8px_8px_0_0_#111111]">
+        <section className="mt-5 grid grid-cols-[auto_1fr] gap-5 items-stretch shrink-0">
+          <div className="bg-rockti-paper rounded-3xl border-[4px] border-rockti-black p-2 shadow-[6px_6px_0_0_#111111] shrink-0">
             <PosterRadar userScores={userScores} prototypeScores={primary.prototypeScores} />
           </div>
-          <div className="space-y-4">
-            <div>
-              <div className="text-sm font-extrabold tracking-[0.3em] opacity-65 mb-2">
-                你的核心维度
-              </div>
-              <div className="flex flex-col gap-2">
-                {top3.map(({ dim }, i) => (
-                  <div
-                    key={dim}
-                    className="flex items-center gap-3 bg-rockti-black text-rockti-paper rounded-2xl px-4 py-2 border-[3px] border-rockti-black"
-                  >
-                    <span className="text-rockti-yellow font-black text-2xl tabular-nums w-6">
-                      {i + 1}
-                    </span>
-                    <span className="text-xl font-extrabold flex-1">
-                      {DIMENSION_LABELS[dim].name}
-                    </span>
-                    <span className="bg-rockti-pink text-rockti-paper px-2.5 py-0.5 rounded-full text-sm font-extrabold tracking-wider">
-                      {LEVEL_LABELS[userLevels[dim]]}
-                    </span>
-                  </div>
-                ))}
-              </div>
+          <div className="flex flex-col justify-center gap-2 min-w-0">
+            <div className="text-[11px] font-extrabold tracking-[0.3em] opacity-70 mb-1">
+              你的核心维度
             </div>
-
+            {top3.map(({ dim }, i) => (
+              <div
+                key={dim}
+                className="flex items-center gap-3 bg-rockti-black text-rockti-paper rounded-2xl px-4 py-2"
+              >
+                <span className="text-rockti-yellow font-black text-xl tabular-nums w-6 shrink-0">
+                  {i + 1}
+                </span>
+                <span className="text-[16px] font-extrabold flex-1 truncate">
+                  {DIMENSION_LABELS[dim].name}
+                </span>
+                <span className="bg-rockti-pink text-rockti-paper px-2.5 py-0.5 rounded-full text-[12px] font-extrabold tracking-wider shrink-0">
+                  {LEVEL_LABELS[userLevels[dim]]}
+                </span>
+              </div>
+            ))}
             {isHybrid && (
-              <div className="bg-rockti-paper/85 border-[3px] border-rockti-black rounded-2xl p-3">
-                <div className="text-[11px] tracking-[0.3em] font-extrabold opacity-70 mb-1">
+              <div className="bg-rockti-paper border-[2.5px] border-rockti-black rounded-2xl px-3.5 py-1.5 mt-1">
+                <div className="text-[9px] tracking-[0.3em] font-extrabold opacity-70">
                   HIDDEN B-SIDE
                 </div>
-                <div className="text-lg font-extrabold leading-tight">
-                  也是「{secondary.personaName}」
-                </div>
-                <div className="text-xs opacity-80 mt-0.5">
-                  {secondary.genre} · {secondary.match}%
+                <div className="text-[14px] font-extrabold leading-tight mt-0.5 truncate">
+                  也是「{secondary.personaName}」 · {secondary.match}%
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* === 洞察区 === */}
-        <div className="mt-7 grid grid-cols-2 gap-4">
-          <div className="bg-rockti-paper border-[3px] border-rockti-black rounded-2xl p-4">
-            <div className="text-xs font-extrabold tracking-[0.25em] text-rockti-pink mb-2">
+        {/* === 优势 + 场景 === */}
+        <section className="mt-4 grid grid-cols-2 gap-3 shrink-0">
+          <div className="bg-rockti-paper border-[2.5px] border-rockti-black rounded-2xl p-3.5">
+            <div className="text-[10px] font-extrabold tracking-[0.25em] text-rockti-pink mb-1.5">
               ✓ 你的优势
             </div>
-            <div className="text-sm font-bold leading-relaxed">
-              {primary.strengths.slice(0, 3).map((s, i) => (
-                <span key={s}>
-                  {i > 0 && <span className="opacity-40 mx-1.5">·</span>}
-                  {s}
-                </span>
-              ))}
+            <div className="text-[14px] font-bold leading-relaxed">
+              {primary.strengths.slice(0, 3).join(" · ")}
             </div>
           </div>
-          <div className="bg-rockti-paper border-[3px] border-rockti-black rounded-2xl p-4">
-            <div className="text-xs font-extrabold tracking-[0.25em] text-rockti-red mb-2">
+          <div className="bg-rockti-paper border-[2.5px] border-rockti-black rounded-2xl p-3.5">
+            <div className="text-[10px] font-extrabold tracking-[0.25em] text-rockti-blue mb-1.5">
               ▶ 适合场景
             </div>
-            <div className="text-sm font-bold leading-relaxed">
-              {primary.scenes.slice(0, 3).map((s, i) => (
-                <span key={s}>
-                  {i > 0 && <span className="opacity-40 mx-1.5">·</span>}
-                  {s}
-                </span>
-              ))}
+            <div className="text-[14px] font-bold leading-relaxed">
+              {primary.scenes.slice(0, 3).join(" · ")}
             </div>
           </div>
-        </div>
+        </section>
 
         {/* === 代表乐队 === */}
-        <div className="mt-4 bg-rockti-black text-rockti-paper rounded-2xl border-[3px] border-rockti-black p-4">
-          <div className="text-xs font-extrabold tracking-[0.25em] text-rockti-yellow mb-2">
+        <section className="mt-3 bg-rockti-black text-rockti-paper rounded-2xl px-5 py-3 shrink-0">
+          <div className="text-[10px] font-extrabold tracking-[0.25em] text-rockti-yellow mb-1">
             ♫ 代表乐队
           </div>
-          <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-sm font-bold">
-            <div>
-              <span className="opacity-60 text-xs mr-2">海外</span>
-              {primary.bandsGlobal.slice(0, 3).join(" · ")}
+          <div className="grid grid-cols-2 gap-x-5 gap-y-0.5 text-[13px] font-bold">
+            <div className="flex items-baseline gap-2 min-w-0">
+              <span className="opacity-55 text-[10px] tracking-wider w-7 shrink-0">海外</span>
+              <span className="flex-1 truncate">
+                {primary.bandsGlobal.slice(0, 3).join(" · ")}
+              </span>
             </div>
-            <div>
-              <span className="opacity-60 text-xs mr-2">华语</span>
-              {primary.bandsChinese.slice(0, 3).join(" · ")}
+            <div className="flex items-baseline gap-2 min-w-0">
+              <span className="opacity-55 text-[10px] tracking-wider w-7 shrink-0">华语</span>
+              <span className="flex-1 truncate">
+                {primary.bandsChinese.slice(0, 3).join(" · ")}
+              </span>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* spacer：吃掉剩余高度，把 footer 顶到底，避免 mt-auto 与 overflow 冲突 */}
+        <div className="flex-1 min-h-[12px]" />
 
         {/* === Footer：QR + URL + 免责 === */}
-        <div className="mt-auto pt-6 grid grid-cols-[auto_1fr] gap-5 items-end">
+        <footer className="grid grid-cols-[auto_1fr] gap-4 items-end shrink-0">
           {qrUrl && (
-            <div className="bg-rockti-paper p-2.5 rounded-2xl border-[4px] border-rockti-black shadow-[6px_6px_0_0_#111111] text-center">
-              <img src={qrUrl} alt="" className="w-28 h-28" />
-              <div className="mt-1 text-[10px] font-extrabold tracking-[0.2em]">
+            <div className="bg-rockti-paper p-2 rounded-2xl border-[3px] border-rockti-black shadow-[4px_4px_0_0_#111111] text-center shrink-0">
+              <img src={qrUrl} alt="" className="w-[96px] h-[96px] block" />
+              <div className="mt-1 text-[9px] font-extrabold tracking-[0.2em]">
                 扫码测一下
               </div>
             </div>
           )}
-          <div className="space-y-1.5">
-            <div className="text-base font-extrabold leading-tight">
+          <div className="space-y-1 min-w-0">
+            <div className="text-[17px] font-black leading-tight">
               ✦ 你也来测一下你的摇滚人格
             </div>
-            <div className="text-sm font-bold opacity-70 break-all">
+            <div className="text-[12px] font-extrabold opacity-80 break-all">
               {shortUrl}
             </div>
-            <div className="text-[11px] opacity-60 leading-relaxed font-bold">
+            <div className="text-[9px] opacity-60 leading-snug font-bold">
               {ROCKTI_DISCLAIMER}
             </div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );

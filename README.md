@@ -87,8 +87,7 @@ https://joker-sxj.github.io/rockti/
 ├── app/                          # Vite React 应用（Vercel Root）
 │   ├── public/
 │   │   └── images/
-│   │       ├── Rockti.png        # 主视觉
-│   │       └── profiles/         # 16 种人格插画
+│   │       └── profiles/         # 16 种人格插画（海报主视觉）
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── layout/           # PageShell / StickerLayer

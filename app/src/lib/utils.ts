@@ -10,7 +10,3 @@ const BASE = import.meta.env.BASE_URL;
 export function profileImageUrl(fileName: string): string {
   return `${BASE}images/profiles/${encodeURIComponent(fileName)}`;
 }
-
-export function logoImageUrl(): string {
-  return `${BASE}images/Rockti.png`;
-}
