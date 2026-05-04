@@ -41,18 +41,19 @@ export function ResultPage({ result, onRestart, onHome }: Props) {
     setShowShareCard(true);
     setExporting(true);
     try {
-      // 等待 DOM 挂载 + QR 生成 + 图片解码
-      await new Promise((r) => setTimeout(r, 350));
+      // 给 React 渲染海报节点 + QR 二维码生成的时间
+      await new Promise((r) => setTimeout(r, 600));
       const node = shareCardRef.current;
-      if (!node) throw new Error("海报节点未就绪");
+      if (!node) throw new Error("海报节点未就绪，请重试");
       const dataUrl = await exportNodeToPng(node, {
         pixelRatio: 1,
         backgroundColor: primary.colors.primary,
       });
       downloadDataUrl(dataUrl, `rockti-${primary.id}.png`);
     } catch (err) {
-      console.error(err);
-      setExportError("海报生成失败，可以截屏分享～");
+      console.error("[share] export failed:", err);
+      const msg = err instanceof Error ? err.message : "未知错误";
+      setExportError(`海报生成失败（${msg}），可以截屏分享～`);
     } finally {
       setExporting(false);
     }

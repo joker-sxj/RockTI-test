@@ -7,6 +7,7 @@ import {
   clearAll,
   loadAnswers,
   loadResult,
+  migrateOrReset,
   saveAnswers,
   saveResult,
 } from "../lib/storage";
@@ -69,15 +70,17 @@ function reducer(state: State, action: Action): State {
 export function useRockti() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // 启动时从 localStorage 恢复
+  // 启动时从 localStorage 恢复（先做 schema migrate，旧版本数据自动清空）
   useEffect(() => {
+    migrateOrReset();
     const answers = loadAnswers();
     const result = loadResult();
     const payload: Partial<State> = {};
     if (Object.keys(answers).length > 0) payload.answers = answers;
     if (result) {
       payload.result = result;
-      payload.stage = "result";
+      // 不再自动跳到 result 页 — 用户每次访问从 home 重新开始；
+      // 已完成的结果数据保留，可在结果页通过"我的上次结果"入口访问（暂未做）
     }
     if (Object.keys(payload).length > 0) {
       dispatch({ type: "HYDRATE", payload });

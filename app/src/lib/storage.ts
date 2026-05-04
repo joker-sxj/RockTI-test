@@ -1,9 +1,16 @@
 import type { RocktiResult, UserAnswerMap } from "../types/rockti";
 
+/**
+ * Schema 版本号 — 每当 RocktiResult / UserAnswerMap 结构或文案语料发生
+ * 与历史不兼容的变化时升级，启动时旧数据会被自动清空。
+ */
+const SCHEMA_VERSION = "2026-05-04-v2";
+
 const KEYS = {
   ANSWERS: "rockti_answers",
   RESULT: "rockti_result",
   COMPLETED_AT: "rockti_last_completed_at",
+  SCHEMA: "rockti_schema_version",
 } as const;
 
 function safeGet(key: string): string | null {
@@ -27,6 +34,17 @@ function safeRemove(key: string): void {
     localStorage.removeItem(key);
   } catch {
     /* ignore */
+  }
+}
+
+/** 启动时调用一次：检查 schema，老版本数据全部清掉。 */
+export function migrateOrReset(): void {
+  const stored = safeGet(KEYS.SCHEMA);
+  if (stored !== SCHEMA_VERSION) {
+    safeRemove(KEYS.ANSWERS);
+    safeRemove(KEYS.RESULT);
+    safeRemove(KEYS.COMPLETED_AT);
+    safeSet(KEYS.SCHEMA, SCHEMA_VERSION);
   }
 }
 

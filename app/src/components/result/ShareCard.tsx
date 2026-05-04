@@ -59,7 +59,6 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
           <img
             src={logoImageUrl()}
             alt="ROCKTI"
-            crossOrigin="anonymous"
             className="w-24 h-24 rounded-2xl border-[6px] border-rockti-black bg-rockti-paper object-cover shadow-[6px_6px_0_0_#111111]"
           />
           <div>
@@ -87,7 +86,6 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
             <img
               src={profileImageUrl(primary.imageFile)}
               alt={primary.genre}
-              crossOrigin="anonymous"
               className="w-full h-full object-cover"
             />
           </div>

@@ -37,8 +37,10 @@ jobs:
       - name: Build (with /rockti/ base for GitHub Pages)
         run: npm run build -- --base=/rockti/
 
-      - name: SPA 404 fallback
-        run: cp dist/index.html dist/404.html
+      - name: SPA 404 fallback + .nojekyll
+        run: |
+          cp dist/index.html dist/404.html
+          touch dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
