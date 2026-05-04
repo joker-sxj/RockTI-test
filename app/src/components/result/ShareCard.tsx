@@ -13,7 +13,7 @@ type Props = {
 
 const POSTER_W = 1080;
 const POSTER_H = 1350;
-const RADAR_SIZE = 280;
+const RADAR_SIZE = 300;
 
 /** 自定义 SVG 雷达图 — 不依赖 Recharts，html-to-image 截图时稳定 */
 function PosterRadar({
@@ -126,10 +126,13 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
     };
   }, [shareUrl]);
 
-  // 根据人格名长度选合适的字号（更保守，避免溢出）
+  // 字号自适应（主图 280×280，留给文案 ~660px 宽）
   const personaLen = primary.personaName.length;
   const personaFontSize =
-    personaLen <= 4 ? 96 : personaLen <= 5 ? 84 : personaLen <= 6 ? 74 : 64;
+    personaLen <= 4 ? 104 : personaLen <= 5 ? 92 : personaLen <= 6 ? 80 : 70;
+
+  // analysis 控制在 ~80 字内（line-clamp 兜底）
+  const analysisText = primary.analysis;
 
   return (
     <div
@@ -152,60 +155,95 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
         }}
       />
 
-      {/* 装饰星 */}
+      {/* 装饰大水印 */}
       <div
-        className="absolute top-10 right-12 text-[28px] font-black opacity-30 pointer-events-none"
-        style={{ color: "#111111" }}
+        className="absolute pointer-events-none select-none font-black leading-none"
+        style={{
+          right: -32,
+          bottom: 60,
+          fontSize: 360,
+          color: "#111111",
+          opacity: 0.05,
+          letterSpacing: "-0.04em",
+        }}
       >
+        ROCK
+      </div>
+
+      {/* 装饰星点 */}
+      <div className="absolute top-[120px] right-[60px] text-[24px] font-black opacity-25 pointer-events-none">
         ✦
+      </div>
+      <div className="absolute top-[640px] left-[40px] text-[20px] font-black opacity-25 pointer-events-none">
+        ★
+      </div>
+      <div className="absolute bottom-[260px] right-[44px] text-[18px] font-black opacity-25 pointer-events-none">
+        ✶
       </div>
 
       <div
         className="relative z-10 h-full flex flex-col"
-        style={{ padding: "48px 52px" }}
+        style={{ padding: "44px 50px" }}
       >
         {/* === Header === */}
         <header className="flex items-end justify-between border-b-[3px] border-rockti-black/80 pb-3 shrink-0">
           <div>
-            <div className="text-[40px] font-black tracking-[0.12em] leading-none">
+            <div className="text-[42px] font-black tracking-[0.12em] leading-none">
               ROCKTI
             </div>
             <div className="mt-1.5 text-[12px] font-bold opacity-75 tracking-[0.2em]">
               ROCK PERSONALITY · 摇滚人格测试
             </div>
           </div>
-          <div className="text-right text-[10px] font-bold opacity-65 tracking-[0.2em] leading-relaxed">
-            EST. 2026
-            <br />
-            MADE FOR FUN
+          <div className="text-right">
+            <div className="text-[10px] font-bold opacity-65 tracking-[0.2em] leading-relaxed">
+              EST. 2026
+              <br />
+              MADE FOR FUN
+            </div>
+            <div className="mt-2 inline-flex items-center gap-1 bg-rockti-black text-rockti-paper px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-[0.2em]">
+              <span>#</span>
+              <span>{primary.id.toUpperCase()}</span>
+            </div>
           </div>
         </header>
 
         {/* === 主人格区：人格图 + 标题 === */}
-        <section className="mt-6 grid grid-cols-[260px_1fr] gap-6 items-center shrink-0">
-          {/* 人格图 */}
-          <div
-            className="w-[260px] h-[260px] rounded-3xl border-[4px] border-rockti-black overflow-hidden bg-rockti-paper shadow-[8px_8px_0_0_#111111]"
-          >
-            <img
-              src={profileImageUrl(primary.imageFile)}
-              alt={primary.genre}
-              className="w-full h-full object-cover"
-              crossOrigin="anonymous"
-            />
+        <section className="mt-5 grid grid-cols-[280px_1fr] gap-6 items-center shrink-0">
+          {/* 人格图 + 浮标 */}
+          <div className="relative">
+            <div className="w-[280px] h-[280px] rounded-3xl border-[4px] border-rockti-black overflow-hidden bg-rockti-paper shadow-[8px_8px_0_0_#111111]">
+              <img
+                src={profileImageUrl(primary.imageFile)}
+                alt={primary.genre}
+                className="w-full h-full object-cover"
+                crossOrigin="anonymous"
+              />
+            </div>
+            {/* 角标：匹配度 */}
+            <div className="absolute -top-3 -right-3 bg-rockti-yellow border-[3px] border-rockti-black rounded-full w-[78px] h-[78px] flex flex-col items-center justify-center shadow-[3px_3px_0_0_#111111]">
+              <div className="text-[10px] font-extrabold tracking-[0.15em] leading-none">
+                MATCH
+              </div>
+              <div className="text-[26px] font-black leading-none mt-0.5 tabular-nums">
+                {primary.match}
+              </div>
+            </div>
           </div>
+
           {/* 人格信息 */}
           <div className="flex flex-col justify-center min-w-0">
             <div className="flex flex-wrap gap-2 mb-3">
               <span className="bg-rockti-black text-rockti-paper px-4 py-1 rounded-full text-[16px] font-extrabold tracking-wider">
                 {primary.genre}
               </span>
-              <span className="bg-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[14px] font-extrabold">
-                匹配度 {primary.match}%
-              </span>
-              {isHybrid && (
-                <span className="bg-rockti-pink text-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[14px] font-extrabold">
+              {isHybrid ? (
+                <span className="bg-rockti-pink text-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[13px] font-extrabold">
                   ✶ 混合人格
+                </span>
+              ) : (
+                <span className="bg-rockti-paper border-[2.5px] border-rockti-black px-3.5 py-0.5 rounded-full text-[13px] font-extrabold">
+                  ROCK PERSONA
                 </span>
               )}
             </div>
@@ -221,13 +259,23 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
           </div>
         </section>
 
+        {/* === 关于你 / Analysis === */}
+        <section className="mt-5 relative bg-rockti-paper border-[3px] border-rockti-black rounded-2xl px-5 py-4 shadow-[5px_5px_0_0_#111111] shrink-0">
+          <div className="absolute -top-3 left-5 bg-rockti-pink text-rockti-paper px-3 py-0.5 rounded-full text-[10px] font-extrabold tracking-[0.25em] border-[2.5px] border-rockti-black">
+            ABOUT YOU
+          </div>
+          <p className="text-[15px] font-bold leading-[1.55] text-rockti-black/90 line-clamp-3">
+            {analysisText}
+          </p>
+        </section>
+
         {/* === 雷达 + Top Dim === */}
-        <section className="mt-5 grid grid-cols-[auto_1fr] gap-5 items-stretch shrink-0">
+        <section className="mt-4 grid grid-cols-[auto_1fr] gap-5 items-stretch shrink-0">
           <div className="bg-rockti-paper rounded-3xl border-[4px] border-rockti-black p-2 shadow-[6px_6px_0_0_#111111] shrink-0">
             <PosterRadar userScores={userScores} prototypeScores={primary.prototypeScores} />
           </div>
           <div className="flex flex-col justify-center gap-2 min-w-0">
-            <div className="text-[11px] font-extrabold tracking-[0.3em] opacity-70 mb-1">
+            <div className="text-[11px] font-extrabold tracking-[0.3em] opacity-70 mb-0.5">
               你的核心维度
             </div>
             {top3.map(({ dim }, i) => (
@@ -241,13 +289,13 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
                 <span className="text-[16px] font-extrabold flex-1 truncate">
                   {DIMENSION_LABELS[dim].name}
                 </span>
-                <span className="bg-rockti-pink text-rockti-paper px-2.5 py-0.5 rounded-full text-[12px] font-extrabold tracking-wider shrink-0">
+                <span className="bg-rockti-pink text-rockti-paper px-2.5 py-0.5 rounded-full text-[11px] font-extrabold tracking-wider shrink-0">
                   {LEVEL_LABELS[userLevels[dim]]}
                 </span>
               </div>
             ))}
             {isHybrid && (
-              <div className="bg-rockti-paper border-[2.5px] border-rockti-black rounded-2xl px-3.5 py-1.5 mt-1">
+              <div className="bg-rockti-paper border-[2.5px] border-rockti-black rounded-2xl px-3.5 py-1.5 mt-0.5">
                 <div className="text-[9px] tracking-[0.3em] font-extrabold opacity-70">
                   HIDDEN B-SIDE
                 </div>
@@ -281,8 +329,13 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
 
         {/* === 代表乐队 === */}
         <section className="mt-3 bg-rockti-black text-rockti-paper rounded-2xl px-5 py-3 shrink-0">
-          <div className="text-[10px] font-extrabold tracking-[0.25em] text-rockti-yellow mb-1">
-            ♫ 代表乐队
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[10px] font-extrabold tracking-[0.25em] text-rockti-yellow">
+              ♫ 代表乐队
+            </div>
+            <div className="text-[9px] font-bold tracking-[0.25em] text-rockti-paper/40">
+              REPRESENTATIVE BANDS
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-x-5 gap-y-0.5 text-[13px] font-bold">
             <div className="flex items-baseline gap-2 min-w-0">
@@ -300,24 +353,24 @@ export const ShareCard = forwardRef<HTMLDivElement, Props>(({ result, shareUrl }
           </div>
         </section>
 
-        {/* spacer：吃掉剩余高度，把 footer 顶到底，避免 mt-auto 与 overflow 冲突 */}
-        <div className="flex-1 min-h-[12px]" />
+        {/* 小 spacer：留极小弹性，防止极端字号下挤压 footer */}
+        <div className="flex-1 min-h-[8px] max-h-[28px]" />
 
         {/* === Footer：QR + URL + 免责 === */}
-        <footer className="grid grid-cols-[auto_1fr] gap-4 items-end shrink-0">
+        <footer className="grid grid-cols-[auto_1fr] gap-4 items-end shrink-0 border-t-[3px] border-rockti-black/40 pt-3">
           {qrUrl && (
             <div className="bg-rockti-paper p-2 rounded-2xl border-[3px] border-rockti-black shadow-[4px_4px_0_0_#111111] text-center shrink-0">
-              <img src={qrUrl} alt="" className="w-[96px] h-[96px] block" />
+              <img src={qrUrl} alt="" className="w-[100px] h-[100px] block" />
               <div className="mt-1 text-[9px] font-extrabold tracking-[0.2em]">
-                扫码测一下
+                扫码挑战
               </div>
             </div>
           )}
           <div className="space-y-1 min-w-0">
-            <div className="text-[17px] font-black leading-tight">
+            <div className="text-[18px] font-black leading-tight">
               ✦ 你也来测一下你的摇滚人格
             </div>
-            <div className="text-[12px] font-extrabold opacity-80 break-all">
+            <div className="text-[13px] font-extrabold opacity-85 break-all">
               {shortUrl}
             </div>
             <div className="text-[9px] opacity-60 leading-snug font-bold">

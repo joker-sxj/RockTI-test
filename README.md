@@ -9,6 +9,18 @@ ROCKTI 是一个**纯前端摇滚人格测试 H5 / Web App**。
 
 ---
 
+## 🎸 在线试玩
+
+| 入口 | 地址 | 适用 |
+|---|---|---|
+| ⚡ **Vercel**（推荐） | <https://rockti.vercel.app/> | 国内直连 / 海外都可 |
+| 🌐 **GitHub Pages** | <https://joker-sxj.github.io/rockti/> | 备用 / 海外 |
+
+> 打开链接 → 24 道题 → 拿到属于你的摇滚人格 + 1080×1350 海报。
+> 全程纯前端，不收任何账号、不上传任何数据。
+
+---
+
 ## ✨ 特性
 
 - **24 道场景沉浸式题目** — 把"你对 X 的态度"换成有画面的小剧场。
@@ -55,6 +67,8 @@ npm run lint     # ESLint
 ## 📦 部署
 
 ### 方案 A · Vercel（推荐，国内可访问性最好）
+
+> **本仓库已部署：** <https://rockti.vercel.app/>
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjoker-sxj%2Frockti&root-directory=app)
 
