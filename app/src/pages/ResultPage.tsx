@@ -7,6 +7,7 @@ import { Badge } from "../components/ui/Badge";
 import { ResultHero } from "../components/result/ResultHero";
 import { MatchScore } from "../components/result/MatchScore";
 import { DimensionRadar } from "../components/result/DimensionRadar";
+import { PreferenceProfile } from "../components/result/PreferenceProfile";
 import { ProfileAnalysis } from "../components/result/ProfileAnalysis";
 import { BandList } from "../components/result/BandList";
 import { SceneList } from "../components/result/SceneList";
@@ -24,7 +25,7 @@ type Props = {
 };
 
 export function ResultPage({ result, onRestart, onHome }: Props) {
-  const { primary, secondary, isHybrid, userScores } = result;
+  const { primary, secondary, isHybrid, userScores, userLevels } = result;
   const shareCardRef = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [showShareCard, setShowShareCard] = useState(false);
@@ -115,8 +116,11 @@ export function ResultPage({ result, onRestart, onHome }: Props) {
               </span>
             </div>
           </div>
-          <DimensionRadar userScores={userScores} prototypeScores={primary.prototype} height={320} />
+          <DimensionRadar userScores={userScores} prototypeScores={primary.prototypeScores} height={320} />
         </Card>
+
+        {/* 你的偏好画像 */}
+        <PreferenceProfile levels={userLevels} />
 
         {/* 分析 + 优势/盲区 */}
         <ProfileAnalysis result={primary} />

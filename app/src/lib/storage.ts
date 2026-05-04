@@ -1,10 +1,10 @@
 import type { RocktiResult, UserAnswerMap } from "../types/rockti";
 
 /**
- * Schema 版本号 — 每当 RocktiResult / UserAnswerMap 结构或文案语料发生
- * 与历史不兼容的变化时升级，启动时旧数据会被自动清空。
+ * Schema 版本号 — 算法 / 数据结构每次大改都升级，旧浏览器中残留的数据自动清掉。
+ * v3 = 离散化曼哈顿距离 + likert 题目（2026-05-04）
  */
-const SCHEMA_VERSION = "2026-05-04-v2";
+const SCHEMA_VERSION = "2026-05-04-v3";
 
 const KEYS = {
   ANSWERS: "rockti_answers",

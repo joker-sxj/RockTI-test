@@ -1,8 +1,15 @@
 import type { RockProfile } from "../types/rockti";
 
 /**
- * 16 种 ROCKTI 摇滚人格原型 — 严格遵循 spec v1.0
- * prototype 是 8 维标准化分数（0-100），不可调整。
+ * 16 种 ROCKTI 摇滚人格 — pattern 是 8 字符 H/M/L 串
+ * 顺序对应 DIMENSIONS: EN HV RB EX CX EM RT ST
+ *
+ * H/M/L 含义：High（高偏好）/ Medium（中偏好）/ Low（低偏好）
+ *
+ * 设计原则：
+ *   1. 16 个 pattern 两两不同（保证最近邻 distance ≥ 1）
+ *   2. 同类型族（朋克/流行朋克、迷幻/盯鞋/后摇）保留相似度但区分关键维度
+ *   3. 极端类型（民谣的 LLLLLHHM、重金属的 HHMMHMLH）保持差异感
  */
 export const ROCK_PROFILES: RockProfile[] = [
   {
@@ -10,11 +17,12 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "经典摇滚",
     personaName: "复古舞台王",
     tagline: "你的人生需要一个复古麦克风和一段漂亮 riff。",
-    prototype: { EN: 70, HV: 55, RB: 45, EX: 35, CX: 45, EM: 55, RT: 80, ST: 75 },
+    //        EN HV RB EX CX EM RT ST
+    pattern: "H  M  M  L  M  M  H  H".replace(/\s+/g, ""),
     analysis:
-      "你偏好清晰、有记忆点、能让人立刻进入状态的摇滚。喜欢经典的舞台姿态、漂亮的吉他动机、可以跟着唱的旋律，以及那种\"这歌能传很多年\"的耐听感。你不是保守，而是相信真正的好歌经得起时间放大。",
-    strengths: ["审美稳定", "喜欢高完成度作品", "有舞台感", "聚会里的气氛担当"],
-    blindspots: ["可能对过度实验的音乐耐心不足", "容易把\"经典\"误认为唯一标准"],
+      "你偏好清晰、有记忆点、能让人立刻进入状态的摇滚。喜欢经典的舞台姿态、漂亮的吉他动机、可以跟着唱的旋律，以及那种'这歌能传很多年'的耐听感。",
+    strengths: ["审美稳定", "喜欢高完成度作品", "聚会里的气氛担当"],
+    blindspots: ["可能对过度实验的音乐耐心不足", "容易把'经典'误认为唯一标准"],
     bandsGlobal: ["The Beatles", "The Rolling Stones", "Queen", "Led Zeppelin", "The Who"],
     bandsChinese: ["黑豹", "唐朝", "Beyond", "零点", "轮回"],
     scenes: ["公路旅行", "朋友聚会", "演出返场", "深夜合唱"],
@@ -26,10 +34,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "硬摇滚",
     personaName: "高压放大器",
     tagline: "你解决问题的方式是：把音箱再开大一点。",
-    prototype: { EN: 85, HV: 75, RB: 55, EX: 35, CX: 45, EM: 45, RT: 60, ST: 85 },
+    pattern: "H  H  M  L  M  M  M  H".replace(/\s+/g, ""),
     analysis:
-      "你喜欢直接、强烈、充满肌肉感的声音。不想绕弯子，riff 要硬、鼓点要冲、副歌要能让人站起来。你对舞台能量和身体反应很敏感——一首歌好不好，先看它有没有把空气推起来。",
-    strengths: ["行动力强", "情绪释放能力好", "喜欢直接表达", "懂现场感染力"],
+      "你喜欢直接、强烈、充满肌肉感的声音。riff 要硬、鼓点要冲、副歌要能让人站起来。一首歌好不好，先看它有没有把空气推起来。",
+    strengths: ["行动力强", "情绪释放能力好", "懂现场感染力"],
     blindspots: ["有时嫌细腻表达不够有劲", "对慢热作品容易失去耐心"],
     bandsGlobal: ["AC/DC", "Deep Purple", "Guns N' Roses", "Aerosmith", "Van Halen"],
     bandsChinese: ["黑豹", "唐朝", "超载", "指南针", "信乐团"],
@@ -42,11 +50,11 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "重金属",
     personaName: "黑铁战士",
     tagline: "你不是暴躁，你只是需要足够重的声音承载灵魂。",
-    prototype: { EN: 90, HV: 95, RB: 60, EX: 45, CX: 70, EM: 50, RT: 35, ST: 75 },
+    pattern: "H  H  M  M  H  M  L  H".replace(/\s+/g, ""),
     analysis:
-      "你偏好高密度、高压迫、高控制感的声音。不一定每天都愤怒，但你需要一种足够重的声音来承载复杂情绪。喜欢强鼓点、厚失真、暗色意象、技术感和仪式感。对你来说，音乐不是背景，而是一套盔甲。",
-    strengths: ["抗压能力强", "对强烈情绪有容纳力", "对技术和完成度敏感", "喜欢有力量的表达"],
-    blindspots: ["有时会把\"强烈\"误认为\"真实\"", "可能低估轻柔音乐的情绪深度"],
+      "你偏好高密度、高压迫、高控制感的声音。需要一种足够重的声音承载复杂情绪。喜欢强鼓点、厚失真、暗色意象、技术感和仪式感——音乐对你来说不是背景，而是一套盔甲。",
+    strengths: ["抗压能力强", "对强烈情绪有容纳力", "对技术和完成度敏感"],
+    blindspots: ["有时会把'强烈'误认为'真实'", "可能低估轻柔音乐的情绪深度"],
     bandsGlobal: ["Black Sabbath", "Metallica", "Iron Maiden", "Judas Priest", "Megadeth"],
     bandsChinese: ["唐朝", "超载", "夜叉", "冥界", "窒息"],
     scenes: ["健身", "赶 deadline", "夜路独行", "情绪蓄力"],
@@ -58,14 +66,14 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "朋克摇滚",
     personaName: "反骨安全别针",
     tagline: "你的内心住着一枚安全别针，专扎虚伪。",
-    prototype: { EN: 85, HV: 65, RB: 95, EX: 45, CX: 25, EM: 50, RT: 35, ST: 80 },
+    pattern: "H  H  H  M  L  M  L  H".replace(/\s+/g, ""),
     analysis:
-      "你讨厌过度包装和假装高级的东西。更相信直接、快速、真实、带刺的表达。喜欢那些粗糙但有态度的声音，宁愿三分钟说真话，也不愿十分钟装深刻。",
-    strengths: ["立场鲜明", "表达直接", "行动力强", "不容易被权威吓住"],
+      "你讨厌过度包装和假装高级的东西。更相信直接、快速、真实、带刺的表达——宁愿三分钟说真话，也不愿十分钟装深刻。",
+    strengths: ["立场鲜明", "表达直接", "不容易被权威吓住"],
     blindspots: ["有时过于排斥复杂性", "容易把妥协都看成投降"],
     bandsGlobal: ["Ramones", "Sex Pistols", "The Clash", "Dead Kennedys", "Green Day"],
     bandsChinese: ["反光镜", "脑浊", "SMZB", "Demerit", "Joyside"],
-    scenes: ["发泄", "抗议现场", "冲动出门", "想说\"不\"的时候"],
+    scenes: ["发泄", "冲动出门", "想说'不'的时候"],
     colors: { primary: "#FF2E88", secondary: "#111111", accent: "#FFD43B" },
     imageFile: "朋克摇滚.png",
   },
@@ -74,10 +82,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "后朋克",
     personaName: "冷脸贝斯诗人",
     tagline: "你不吵，但你的沉默很有攻击性。",
-    prototype: { EN: 45, HV: 45, RB: 70, EX: 70, CX: 65, EM: 65, RT: 30, ST: 35 },
+    pattern: "M  M  H  H  H  H  L  L".replace(/\s+/g, ""),
     analysis:
-      "你喜欢冷感、克制、疏离却带着锋利态度的声音。未必追求高分贝，但你在意气质、结构和潜台词。常被低频贝斯、重复节奏、城市焦虑和黑白色调吸引。",
-    strengths: ["观察力强", "审美克制", "思考深", "不被热闹带走"],
+      "你喜欢冷感、克制、疏离却带着锋利态度的声音。未必追求高分贝，但你在意气质、结构和潜台词——常被低频贝斯、重复节奏和黑白色调吸引。",
+    strengths: ["观察力强", "审美克制", "思考深"],
     blindspots: ["容易显得距离感强", "不擅长直接表达情绪"],
     bandsGlobal: ["Joy Division", "The Cure", "Bauhaus", "Siouxsie and the Banshees", "Interpol"],
     bandsChinese: ["P.K.14", "重塑雕像的权利", "Snapline", "亲爱的艾洛伊丝", "工工工"],
@@ -90,10 +98,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "前卫摇滚",
     personaName: "概念专辑建筑师",
     tagline: "你的脑子里住着一张还没发行的概念专辑。",
-    prototype: { EN: 55, HV: 50, RB: 40, EX: 90, CX: 95, EM: 50, RT: 35, ST: 45 },
+    pattern: "M  M  L  H  H  M  L  M".replace(/\s+/g, ""),
     analysis:
-      "你不满足于一首歌只有主歌和副歌。喜欢复杂结构、奇怪节拍、宏大概念、长篇展开和\"听第二遍才发现\"的细节。听音乐像读一本结构复杂的小说，需要线索、伏笔和世界观。",
-    strengths: ["好奇心强", "结构感强", "喜欢深度探索", "对复杂作品有耐心"],
+      "你不满足于一首歌只有主歌和副歌。喜欢复杂结构、奇怪节拍、宏大概念和长篇展开——听音乐像读一本结构复杂的小说，需要线索、伏笔和世界观。",
+    strengths: ["好奇心强", "结构感强", "对复杂作品有耐心"],
     blindspots: ["可能把简单作品低估", "有时显得过度分析"],
     bandsGlobal: ["Pink Floyd", "King Crimson", "Yes", "Genesis", "Rush"],
     bandsChinese: ["万能青年旅店", "木马", "美好药店", "吹万", "唐朝"],
@@ -106,10 +114,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "迷幻摇滚",
     personaName: "宇宙蘑菇旅人",
     tagline: "你听的不是歌，是一场意识的液态旅行。",
-    prototype: { EN: 50, HV: 40, RB: 50, EX: 95, CX: 70, EM: 70, RT: 40, ST: 45 },
+    pattern: "M  L  M  H  H  H  L  M".replace(/\s+/g, ""),
     analysis:
-      "你偏好漂浮、旋涡、回声、梦境感和感知扩张。喜欢声音不急着抵达，而是在空间中流动。对未知和抽象有天然兴趣，不怕音乐变怪——甚至越怪越想靠近。",
-    strengths: ["想象力强", "开放度高", "对氛围敏感", "善于进入沉浸状态"],
+      "你偏好漂浮、旋涡、回声、梦境感和感知扩张。喜欢声音不急着抵达，而是在空间中流动——对未知和抽象有天然兴趣，越怪越想靠近。",
+    strengths: ["想象力强", "开放度高", "对氛围敏感"],
     blindspots: ["容易沉迷感受而忽略现实推进", "对直白表达兴趣不足"],
     bandsGlobal: ["The Doors", "Grateful Dead", "Tame Impala", "Pink Floyd", "Jefferson Airplane"],
     bandsChinese: ["吹万", "Carsick Cars", "鸭打鹅", "海龟先生", "白水"],
@@ -122,10 +130,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "布鲁斯摇滚",
     personaName: "午夜蓝调浪子",
     tagline: "你很松弛，但你的情绪有很深的年轮。",
-    prototype: { EN: 50, HV: 45, RB: 25, EX: 25, CX: 45, EM: 85, RT: 95, ST: 55 },
+    pattern: "M  M  L  L  M  H  H  M".replace(/\s+/g, ""),
     analysis:
-      "你喜欢根源、律动、烟雾感和细腻的情绪颗粒。不需要音乐一直爆炸，更在意那一下弯音、那一段即兴、那种\"经历过才懂\"的味道。你像一杯慢慢喝的酒——不急，但很深。",
-    strengths: ["情绪成熟", "审美有根", "喜欢真实表达", "能在简单里听见细节"],
+      "你喜欢根源、律动、烟雾感和细腻的情绪颗粒。不需要音乐一直爆炸，更在意那一下弯音、那段即兴、那种'经历过才懂'的味道。",
+    strengths: ["情绪成熟", "审美有根", "能在简单里听见细节"],
     blindspots: ["对过度电子化或概念化音乐较冷淡", "有时容易沉溺怀旧"],
     bandsGlobal: ["Cream", "The Allman Brothers Band", "Stevie Ray Vaughan", "ZZ Top", "Gary Moore"],
     bandsChinese: ["布衣", "低苦艾", "野孩子", "杭盖", "二手玫瑰"],
@@ -138,10 +146,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "民谣摇滚",
     personaName: "公路故事歌手",
     tagline: "你把生活写成歌，把远方唱成家。",
-    prototype: { EN: 35, HV: 20, RB: 35, EX: 35, CX: 35, EM: 95, RT: 80, ST: 50 },
+    pattern: "L  L  L  L  L  H  H  M".replace(/\s+/g, ""),
     analysis:
-      "你重视故事、生活、真诚和人文温度。喜欢木吉他、路、风、故乡、朋友和具体的人。对你来说，摇滚不一定要很吵，它也可以是一种诚实地讲述生活的方式。",
-    strengths: ["共情力强", "文字敏感", "真实可靠", "重视人与故事"],
+      "你重视故事、生活、真诚和人文温度。喜欢木吉他、路、风、故乡和具体的人——对你来说，摇滚不一定要很吵，它也可以是一种诚实地讲述生活的方式。",
+    strengths: ["共情力强", "文字敏感", "真实可靠"],
     blindspots: ["对强噪音和极端表达不太适应", "容易被情绪拖住"],
     bandsGlobal: ["Bob Dylan", "The Byrds", "Simon & Garfunkel", "Eagles", "Mumford & Sons"],
     bandsChinese: ["野孩子", "低苦艾", "布衣", "马条", "九连真人"],
@@ -154,11 +162,11 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "另类摇滚",
     personaName: "反主流观察者",
     tagline: "你不是难懂，你只是讨厌被分类。",
-    prototype: { EN: 60, HV: 55, RB: 70, EX: 70, CX: 60, EM: 70, RT: 30, ST: 55 },
+    pattern: "M  M  H  H  M  H  L  M".replace(/\s+/g, ""),
     analysis:
-      "你喜欢旋律和噪音并存，也喜欢漂亮和别扭共处。不一定故意小众，但天然会避开过于标准的答案。在意态度、情绪和观察力，希望音乐能表达那些难以用普通话说清楚的东西。",
-    strengths: ["审美独立", "敏感敏锐", "能接受矛盾", "喜欢发现边缘价值"],
-    blindspots: ["有时过度抗拒大众喜好", "可能把\"不一样\"当成必要条件"],
+      "你喜欢旋律和噪音并存，漂亮和别扭共处。不一定故意小众，但天然会避开过于标准的答案——希望音乐能表达那些难以用普通话说清楚的东西。",
+    strengths: ["审美独立", "敏感敏锐", "能接受矛盾"],
+    blindspots: ["有时过度抗拒大众喜好", "可能把'不一样'当成必要条件"],
     bandsGlobal: ["R.E.M.", "Radiohead", "Pixies", "The Smashing Pumpkins", "Sonic Youth"],
     bandsChinese: ["万能青年旅店", "痛仰", "新裤子", "刺猬", "逃跑计划"],
     scenes: ["独处", "城市漫游", "深夜耳机", "情绪复杂的时候"],
@@ -170,10 +178,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "独立摇滚",
     personaName: "小众耳机收藏家",
     tagline: "你的人格像一张只发行 300 张的黑胶。",
-    prototype: { EN: 45, HV: 35, RB: 50, EX: 65, CX: 50, EM: 75, RT: 45, ST: 35 },
+    pattern: "M  L  M  H  M  H  M  L".replace(/\s+/g, ""),
     analysis:
-      "你喜欢自我、小众、松弛、有一点不合群但不刻意的东西。比起万人合唱，更喜欢一个下午、一副耳机、一支没人知道的乐队。你的审美像私人收藏——不是为了炫耀，而是为了确认\"这是我\"。",
-    strengths: ["审美细腻", "自我意识强", "不轻易随大流", "能发现冷门好东西"],
+      "你喜欢自我、小众、松弛、有一点不合群但不刻意的东西。比起万人合唱，更喜欢一个下午、一副耳机、一支没人知道的乐队。",
+    strengths: ["审美细腻", "自我意识强", "能发现冷门好东西"],
     blindspots: ["容易陷入小众优越感", "社交表达不够主动"],
     bandsGlobal: ["The Strokes", "Arctic Monkeys", "Modest Mouse", "Arcade Fire", "Vampire Weekend"],
     bandsChinese: ["刺猬", "旅行团", "后海大鲨鱼", "Carsick Cars", "Schoolgirl byebye"],
@@ -186,10 +194,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "垃圾摇滚",
     personaName: "破洞牛仔失眠人",
     tagline: "你不想精致，你想真实到有点破。",
-    prototype: { EN: 70, HV: 75, RB: 75, EX: 45, CX: 35, EM: 90, RT: 35, ST: 55 },
+    pattern: "H  H  H  M  L  H  L  M".replace(/\s+/g, ""),
     analysis:
-      "你偏好粗粝、厌世、真实和脆弱混在一起的声音。可能不喜欢过度完美的表达，反而容易被破音、失真、疲惫感和自嘲打动。听歌不是为了假装没事，而是为了承认\"我确实不太好\"。",
-    strengths: ["真诚", "不装", "能面对阴暗情绪", "对虚假精致很敏感"],
+      "你偏好粗粝、厌世、真实和脆弱混在一起的声音。容易被破音、失真、疲惫感和自嘲打动——听歌不是为了假装没事，而是为了承认'我确实不太好'。",
+    strengths: ["真诚", "不装", "能面对阴暗情绪"],
     blindspots: ["容易沉入低气压", "有时把粗糙误认为真实"],
     bandsGlobal: ["Nirvana", "Pearl Jam", "Soundgarden", "Alice in Chains", "Stone Temple Pilots"],
     bandsChinese: ["木马", "清醒", "The Molds", "Birdstriking", "Carsick Cars"],
@@ -202,10 +210,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "英伦摇滚",
     personaName: "都市合唱青年",
     tagline: "你适合站在城市黄昏里唱一首万人副歌。",
-    prototype: { EN: 70, HV: 45, RB: 45, EX: 40, CX: 45, EM: 60, RT: 70, ST: 85 },
+    pattern: "H  M  L  L  M  M  H  H".replace(/\s+/g, ""),
     analysis:
-      "你喜欢旋律、城市感、复古青年气质和可以一起唱的副歌。你的摇滚不一定最重，但一定要有记忆点和画面感。喜欢把个人情绪变成公共合唱，把日常生活唱成一部城市电影。",
-    strengths: ["旋律感强", "社交感好", "审美有风格", "善于制造共同记忆"],
+      "你喜欢旋律、城市感、复古青年气质和可以一起唱的副歌。摇滚不一定最重，但一定要有记忆点和画面感——把个人情绪变成公共合唱，把日常生活唱成一部城市电影。",
+    strengths: ["旋律感强", "社交感好", "善于制造共同记忆"],
     blindspots: ["对过于抽象的音乐缺少耐心", "容易迷恋某种青春滤镜"],
     bandsGlobal: ["Oasis", "Blur", "Pulp", "Suede", "The Verve"],
     bandsChinese: ["果味VC", "花儿乐队", "逃跑计划", "五月天", "苏打绿"],
@@ -218,10 +226,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "流行朋克",
     personaName: "青春爆裂汽水",
     tagline: "你是青春期没关掉的失真踏板。",
-    prototype: { EN: 90, HV: 55, RB: 70, EX: 30, CX: 25, EM: 75, RT: 35, ST: 95 },
+    pattern: "H  M  H  L  L  H  L  H".replace(/\s+/g, ""),
     analysis:
-      "你喜欢明亮、直接、年轻、快节奏的情绪释放。不是没有烦恼，而是更愿意把烦恼唱成一个可以跳起来的副歌。你需要一点叛逆、一点可爱、一点冲动，最好还有一个全场都能喊的 hook。",
-    strengths: ["情绪外放", "感染力强", "年轻感强", "把坏心情变成动力"],
+      "你喜欢明亮、直接、年轻、快节奏的情绪释放。不是没有烦恼，而是更愿意把烦恼唱成一个可以跳起来的副歌——需要一点叛逆、一点可爱、一点冲动。",
+    strengths: ["情绪外放", "感染力强", "把坏心情变成动力"],
     blindspots: ["处理复杂情绪时过于急着乐观", "容易三分钟热血"],
     bandsGlobal: ["Green Day", "Blink-182", "Paramore", "Sum 41", "Fall Out Boy"],
     bandsChinese: ["Chinese Football", "反光镜", "果味VC", "花儿乐队", "夏日入侵企画"],
@@ -234,10 +242,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "盯鞋摇滚",
     personaName: "低头音墙梦游者",
     tagline: "你低头不是害羞，是在调通往梦境的效果器。",
-    prototype: { EN: 30, HV: 55, RB: 35, EX: 80, CX: 60, EM: 85, RT: 25, ST: 20 },
+    pattern: "L  M  L  H  M  H  L  L".replace(/\s+/g, ""),
     analysis:
-      "你喜欢朦胧、内向、柔软又巨大的声音。不需要主唱把话说得很清楚，甚至人声埋在音墙里才刚刚好。重视氛围、纹理、混响和那种像梦一样包住自己的感觉。",
-    strengths: ["审美敏感", "内在世界丰富", "享受细微变化", "对空间感和质地敏锐"],
+      "你喜欢朦胧、内向、柔软又巨大的声音。不需要主唱把话说得很清楚，甚至人声埋在音墙里才刚刚好——重视氛围、纹理、混响和那种像梦一样包住自己的感觉。",
+    strengths: ["审美敏感", "内在世界丰富", "对空间感和质地敏锐"],
     blindspots: ["表达容易含糊", "可能过度沉浸自己的情绪空间"],
     bandsGlobal: ["My Bloody Valentine", "Slowdive", "Ride", "Cocteau Twins", "DIIV"],
     bandsChinese: ["亲爱的艾洛伊丝", "缺省", "The White Tulips", "Forsaken Autumn", "City Flanker"],
@@ -250,10 +258,10 @@ export const ROCK_PROFILES: RockProfile[] = [
     genre: "后摇滚",
     personaName: "远山延迟信号",
     tagline: "你不急着唱，因为你的情绪会自己长成山。",
-    prototype: { EN: 40, HV: 50, RB: 30, EX: 85, CX: 85, EM: 90, RT: 20, ST: 25 },
+    pattern: "M  M  L  H  H  H  L  L".replace(/\s+/g, ""),
     analysis:
-      "你喜欢器乐、渐强、空间、长线情绪和电影感。不一定需要歌词，因为你相信声音本身可以完成叙事。你像一首慢慢铺开的曲子——前半段安静，后半段把所有情绪推到天边。",
-    strengths: ["情绪深", "有耐心", "画面感强", "善于感受长期变化"],
+      "你喜欢器乐、渐强、空间、长线情绪和电影感。不一定需要歌词，因为你相信声音本身可以完成叙事——前半段安静，后半段把所有情绪推到天边。",
+    strengths: ["情绪深", "有耐心", "画面感强"],
     blindspots: ["有时表达不够直接", "可能让急性子的人等不及"],
     bandsGlobal: ["Mogwai", "Godspeed You! Black Emperor", "Explosions in the Sky", "Sigur Rós", "toe"],
     bandsChinese: ["惘闻", "沼泽", "发光曲线", "Chinese Football", "大象体操"],
