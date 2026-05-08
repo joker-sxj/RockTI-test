@@ -158,8 +158,3 @@ https://joker-sxj.github.io/rockti/
 - 海报生成完全在浏览器内完成，不上传任何数据
 - 二维码内容是 `window.location.origin` — 没有用户身份信息
 
----
-
-## 📜 License
-
-MIT — 仅用于学习和娱乐。题目、文案、视觉系统的灵感参考网络与社区，无任何商业授权背书。
